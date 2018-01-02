@@ -1,0 +1,93 @@
+[base]
+go_max_procs=3
+mode="dev"
+
+[logger]
+format="text"
+level="debug"
+time_format="01-02 15:04:05.000"
+# if log_file_path == "", log will out put to stderr
+#log_file_path="account_auth.log"
+hooks=[
+    ["Airbrake","123","xyz","production"],
+    ["Syslog","udp","localhost:514","info",""],
+    ["SelfDefined","arg1","arg2","arg3"],
+    ["FileHook",">=warn|fileline|server.error.log","<=info|server.info.log"]
+]
+
+
+[service]
+host=":8080"
+path_prefix="/accountAuth/:tenantId"
+mcode_prefix="account_auth"
+
+trace_enabled=true
+access_log_enabled=true
+
+reportable=false
+report_ip="${ip_of_interface,}"
+report_tags=["master","v0.2.1"]
+report_name="account_auth"
+report_id="account_auth_8080"
+
+pprof_enabled = true
+pprof_path_prefix="/abcdefg"
+
+log_level="warn"
+# if log_file_path=="", log will output to stderr
+#log_file_path="access.log"
+
+[mongo]
+#url="${kv_of_consul,kits/mongo/url-external}"
+#url="mongodb://admin:WAer8R59G6@10.25.100.164:27017"
+
+[mysql]
+#url="root:nHH29kEA7@tcp(10.25.100.164:3306)/brokerwork_t001117?charset=utf8&parseTime=True&loc=Local"
+
+[redis]
+#url="${kv_of_consul,kits/redis/endpoint-external}"
+#endpoints="10.25.100.164:6380"
+#password="eqMvluHOCY92.F"
+endpoints="r-wz9c6b5864219364.redis.rds.aliyuncs.com:6379"
+password="L3OAk8Wer7N"
+
+[application]
+snowCount=9000
+
+[zipkin]
+host="${kv_of_consul,kits/zipkin/url-external}"
+
+[consul]
+endpoint="10.25.100.164:8500"
+auto_sync_enabled = true
+
+[discovery]
+enable_consul = true
+enable_static = true
+static_services=[
+    "SystemInquiry 10.30.74.217:9096",
+    "VerifyAccount 10.30.74.217:9096",
+    #"products-org 10.172.77.88:10630",
+    #"VerifyAccount 10.144.100.117:9096",
+]
+
+[hystrix]
+statsd_url="${kv_of_consul,kits/statsd/url-external}"
+default_timeout=2000
+default_max_concurrent_request=500
+default_error_percent_threshold=20
+
+
+[invoker]
+load_balance_mode = "round-robin"
+# 启用调用追踪
+tracing_enabled = false
+# 启用熔断
+hytrix_enabled = true
+# 打印日志
+do_logger = true
+
+[monitor]
+enable_report=true
+aliUid="1765747156115092"
+aliNamespace="ACS/CUSTOM/1765747156115092"
